@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">Book Store</string>
+
+    <string name="table_contains">The books table contains</string>
+    <string name="entries">entry (-es)</string>
+    <string name="error">Error</string>
+
+    <!-- Menu -->
+    <string name="action_add_entry">Add a new entry</string>
+
+    <!-- Editor string values -->
+</resources>
