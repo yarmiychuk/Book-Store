@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_space"
+    tools:context=".EditorActivity">
+
+    <!-- Name -->
+    <LinearLayout style="@style/CategoryStyle">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:text="@string/label_name" />
+
+        <LinearLayout style="@style/InputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_name"
+                style="@style/InputFieldStyle"
+                android:hint="@string/hint_name"
+                android:inputType="textCapSentences" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Price -->
+    <LinearLayout style="@style/CategoryStyle">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:text="@string/label_price" />
+
+        <LinearLayout style="@style/InputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_price"
+                style="@style/InputFieldStyle"
+                android:hint="@string/hint_price"
+                android:inputType="number" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Quantity -->
+    <LinearLayout style="@style/CategoryStyle">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:text="@string/label_quantity" />
+
+        <LinearLayout style="@style/InputLayoutStyle">
+
+            <ImageButton
+                android:id="@+id/ib_remove"
+                style="@style/ButtonStyle"
+                android:contentDescription="@string/button_remove_item"
+                android:src="@mipmap/ic_remove" />
+
+            <EditText
+                android:id="@+id/et_quantity"
+                style="@style/InputFieldStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_space"
+                android:layout_marginRight="@dimen/small_space"
+                android:gravity="center_horizontal"
+                android:hint="@string/hint_quantity"
+                android:inputType="number" />
+
+            <ImageButton
+                android:id="@+id/ib_add"
+                style="@style/ButtonStyle"
+                android:contentDescription="@string/button_add_item"
+                android:src="@mipmap/ic_add" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Supplier name -->
+    <LinearLayout style="@style/CategoryStyle">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:text="@string/label_supplier_name" />
+
+        <LinearLayout style="@style/InputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_supplier_name"
+                style="@style/InputFieldStyle"
+                android:hint="@string/hint_supplier_name"
+                android:inputType="textCapSentences" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Supplier phone -->
+    <LinearLayout style="@style/CategoryStyle">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:text="@string/label_supplier_phone" />
+
+        <LinearLayout style="@style/InputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/InputFieldStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:hint="@string/hint_supplier_phone"
+                android:inputType="phone" />
+
+            <ImageButton
+                android:id="@+id/ib_call"
+                style="@style/ButtonStyle"
+                android:layout_marginLeft="@dimen/small_space"
+                android:layout_marginStart="@dimen/small_space"
+                android:contentDescription="@string/button_call_supplier"
+                android:src="@mipmap/ic_call" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

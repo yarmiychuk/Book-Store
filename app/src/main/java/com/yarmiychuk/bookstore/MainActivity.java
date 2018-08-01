@@ -1,153 +1,106 @@
 package com.yarmiychuk.bookstore;
 
-import android.content.ContentValues;
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.yarmiychuk.bookstore.database.BooksContract.BookEntry;
-import com.yarmiychuk.bookstore.database.BooksDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // Helper for connection with app database
-    private BooksDbHelper helper;
-
-    private TextView tvTableSize, tvDbState;
+    // Identifier for the books data loader
+    private static final int BOOKS_LOADER = 0;
+    // Adapter for books ListView
+    private BooksAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Temporary TextView for display number of rows in table
-        tvTableSize = findViewById(R.id.tv_table_rows_size);
-        // Temporary TextView for display current state of database entries
-        tvDbState = findViewById(R.id.tv_table_state);
+        invalidateUI();
 
-        // Define helper to connect with app database
-        helper = new BooksDbHelper(this);
+        // Call loader
+        getLoaderManager().initLoader(BOOKS_LOADER, null, this);
+    }
+
+    private void invalidateUI() {
+        // Setup FAB to open EditorActivity
+        findViewById(R.id.fab_add_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start Editor activity to add a new book entry
+                startActivity(new Intent(MainActivity.this, EditorActivity.class));
+            }
+        });
+
+        // Find the ListView which will be populated with the books data
+        ListView lvBooks = findViewById(R.id.lv_book_list);
+        // Setup empty view for list of books
+        lvBooks.setEmptyView(findViewById(R.id.ll_empty_view));
+        // Define adapter for ListView
+        adapter = new BooksAdapter(MainActivity.this, null);
+        // Set adapter to ListView
+        lvBooks.setAdapter(adapter);
+        // Add OnClickListener to each list item
+        lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // Create new intent to go to {@link EditorActivity}
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                // Form the content URI that represents the specific pet that was clicked on,
+                // by appending the "id" (passed as input to this method) onto the
+                // {@link PetEntry#CONTENT_URI}.
+                // For example, the URI would be "content://com.example.android.pets/pets/2"
+                // if the pet with ID 2 was clicked on.
+                Uri currentPetUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+
+                // Set the URI on the data field of the intent
+                intent.setData(currentPetUri);
+
+                // Launch the {@link EditorActivity} to display the data for the current pet.
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayTableEntries();
-    }
-
-    // Temporary method to show current state of database entries
-    private void displayTableEntries() {
-
-        // Create and/or open a database to read from it
-        SQLiteDatabase database = helper.getReadableDatabase();
-
-        // Define a projection
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Define a projection that specifies the columns from the books table.
         String[] projection = {
                 BookEntry.ITEM_ID,
                 BookEntry.ITEM_NAME,
                 BookEntry.ITEM_PRICE,
-                BookEntry.ITEM_QUANTITY,
-                BookEntry.ITEM_SUPPLIER_NAME,
-                BookEntry.ITEM_SUPPLIER_PHONE};
+                BookEntry.ITEM_QUANTITY};
 
-        // Perform a query to database
-        Cursor cursor = database.query(
-                BookEntry.TABLE_NAME,    // The table to query
-                projection,    // The columns to return (all)
-                null,    // No selection for now
-                null,    // No selection arguments for now
-                null,    // Don't group the rows
-                null,    // Don't filter by row groups
-                BookEntry.ITEM_NAME);    // The sort order by name
-
-        try {
-            // Display number of rows in table
-            String tableSize = getString(R.string.table_contains)
-                    + " " + cursor.getCount()
-                    + " " + getString(R.string.entries);
-            tvTableSize.setText(tableSize);
-
-            String tableState = BookEntry.ITEM_ID + ", " +
-                    BookEntry.ITEM_NAME + ", " +
-                    BookEntry.ITEM_PRICE + ", " +
-                    BookEntry.ITEM_QUANTITY + ", " +
-                    BookEntry.ITEM_SUPPLIER_NAME + ", " +
-                    BookEntry.ITEM_SUPPLIER_PHONE;
-            tvDbState.setText(tableState);
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_ID);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.ITEM_SUPPLIER_PHONE);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int productId = cursor.getInt(idColumnIndex);
-                String productName = cursor.getString(nameColumnIndex);
-                int productPrice = cursor.getInt(priceColumnIndex);
-                int productQuantity = cursor.getInt(quantityColumnIndex);
-                String productSupplier = cursor.getString(supplierNameColumnIndex);
-                String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                // Display the current state of the table (add new line)
-                tvDbState.append("\n" + productId + ", " + productName + ", "
-                        + productPrice + ", " + productQuantity + ", "
-                        + productSupplier + ", " + supplierPhone);
-            }
-        } catch (SQLException ex) {
-            // Show error message
-            tvDbState.setText(getString(R.string.error));
-        } finally {
-            // Close cursor to clean resources
-            cursor.close();
-        }
-    }
-
-    // Helper method for insertion fake row to database
-    private void insertEntry() {
-
-        // Gets the database in write mode
-        SQLiteDatabase database = helper.getWritableDatabase();
-
-        // Create a ContentValues object with column keys and corresponded values.
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.ITEM_NAME, "Some book");
-        values.put(BookEntry.ITEM_PRICE, 10);
-        values.put(BookEntry.ITEM_QUANTITY, 5);
-        values.put(BookEntry.ITEM_SUPPLIER_NAME, "Supplier");
-        values.put(BookEntry.ITEM_SUPPLIER_PHONE, "12345");
-
-        // Insert entry to database
-        database.insert(BookEntry.TABLE_NAME, null, values);
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                BookEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onLoadFinished(Loader<Cursor> loader, Cursor booksData) {
+        // Update BooksAdapter with this new cursor containing updated books data
+        adapter.swapCursor(booksData);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to a click on the "Add a new entry" option
-            case R.id.action_add:
-                // Add a fake data
-                insertEntry();
-                displayTableEntries();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        adapter.swapCursor(null);
     }
 }
