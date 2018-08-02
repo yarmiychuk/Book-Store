@@ -136,6 +136,7 @@ public class EditorActivity extends AppCompatActivity
                 // Check for changes.
                 if (isNoChanges()) {
                     // Don't need to save the book. Just exit
+                    showToast(getString(R.string.nothing_to_save));
                     finish();
                 } else {
                     // Save book to database

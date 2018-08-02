@@ -36,6 +36,7 @@
     <string name="label_delete">Delete</string>
     <string name="label_exit">Exit</string>
     <string name="label_cancel">Cancel</string>
+    <string name="nothing_to_save">There is nothing to save</string>
 
     <!-- Editor Menu -->
     <string name="action_save">Save a book</string>
