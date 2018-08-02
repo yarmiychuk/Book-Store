@@ -34,7 +34,7 @@ public class BooksAdapter extends CursorAdapter {
         // Inflate a list item view using the layout specified in list_item.xml
         return LayoutInflater.from(context).inflate(R.layout.item_view, parent, false);
     }
-
+    
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         // Find views
