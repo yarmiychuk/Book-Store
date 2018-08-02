@@ -3,6 +3,7 @@ package com.yarmiychuk.bookstore;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class BooksAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         // Find views
+        LinearLayout llItem = view.findViewById(R.id.ll_item);
         TextView tvName = view.findViewById(R.id.tv_name);
         TextView tvPrice = view.findViewById(R.id.tv_price);
         TextView tvQuantity = view.findViewById(R.id.tv_quantity);
@@ -85,5 +88,20 @@ public class BooksAdapter extends CursorAdapter {
                 }
             });
         }
+
+        // Add OnClickListener to all item view
+        llItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create new intent to go to EditorActivity
+                Intent intent = new Intent(context, EditorActivity.class);
+                // Create a Uri
+                Uri bookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                // Set the URI on the data field of the intent
+                intent.setData(bookUri);
+                // Launch the EditorActivity
+                context.startActivity(intent);
+            }
+        });
     }
 }
