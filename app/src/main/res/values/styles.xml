@@ -8,6 +8,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Item label TextView style in list -->
+    <style name="LabelTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/small_space</item>
+        <item name="android:layout_marginLeft">@dimen/small_space</item>
+    </style>
+
+    <!-- Item value TextView style in list -->
+    <style name="ValueTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:text">@string/zero</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
+    <!-- Style of LinearLayout for each category -->
     <style name="CategoryStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -15,6 +33,7 @@
         <item name="android:gravity">bottom</item>
     </style>
 
+    <!-- Style of TextView, represent name of category -->
     <style name="LabelStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
@@ -25,6 +44,7 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
+    <!-- Style of LinearLayout for input fields for each catefory -->
     <style name="InputLayoutStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
@@ -34,6 +54,7 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <!-- Style of EditTexts for each category -->
     <style name="InputFieldStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -41,6 +62,7 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
+    <!-- Button style -->
     <style name="ButtonStyle">
         <item name="android:layout_width">@dimen/button_size</item>
         <item name="android:layout_height">@dimen/button_size</item>

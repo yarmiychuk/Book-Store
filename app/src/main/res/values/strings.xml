@@ -2,11 +2,15 @@
 
     <string name="app_name">Book Store</string>
 
-    <string name="table_contains">The books table contains</string>
-    <string name="entries">entry (-es)</string>
-    <string name="error">Error</string>
-
+    <!-- EmptyView message -->
     <string name="add_entry_hint">To add an entry,\nclick the button below.</string>
+
+    <!-- List Item Strings -->
+    <string name="item_name">Book Name</string>
+    <string name="item_price">Price:</string>
+    <string name="item_quantity">Quantity:</string>
+    <string name="item_sale_label">Sale</string>
+    <string name="zero">0</string>
 
     <!-- Content descriptions -->
     <string name="empty_view_description">Empty database image</string>

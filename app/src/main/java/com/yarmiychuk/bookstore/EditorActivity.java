@@ -133,10 +133,16 @@ public class EditorActivity extends AppCompatActivity
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save book to database
-                if (bookIsSaved()) {
-                    // Exit activity
+                // Check for changes.
+                if (isNoChanges()) {
+                    // Don't need to save the book. Just exit
                     finish();
+                } else {
+                    // Save book to database
+                    if (bookIsSaved()) {
+                        // Exit activity
+                        finish();
+                    }
                 }
                 return true;
             case R.id.action_delete:
